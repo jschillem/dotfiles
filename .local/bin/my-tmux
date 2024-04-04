@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+session_name="my-tmux"
+
+# Check if the session exists
+tmux has-session -t $session_name 2>/dev/null
+
+if [ $? != 0 ]; then
+    # If session doesn't exist, create it
+    tmux new-session -d -s $session_name -n code
+
+    # Create additional tabs
+    tmux new-window -t $session_name: -n exec
+    tmux new-window -t $session_name: -n dev\ server
+
+    # Set the default tab to 'code'
+    tmux select-window -t $session_name:1
+fi
+
+# Attach to the session
+tmux attach-session -t $session_name

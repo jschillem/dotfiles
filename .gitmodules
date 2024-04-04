@@ -1,0 +1,9 @@
+[submodule ".config/nvim"]
+	path = .config/nvim
+	url = git@github.com:jschillem/new_neovim_config.git
+[submodule ".config/tmux"]
+	path = .config/tmux
+	url = git@github.com:jschillem/tmux-config.git
+[submodule ".config/kitty"]
+	path = .config/kitty
+	url = git@github.com:jschillem/kitty-conf.git
