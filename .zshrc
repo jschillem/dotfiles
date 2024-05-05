@@ -129,6 +129,7 @@ fi
 #
 # aliases
 alias vim=nvim
+alias lg=lazygit
 alias c=clear
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
