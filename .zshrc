@@ -11,7 +11,7 @@ export GOPATH=$HOME/go
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
-# export PATH=$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin
+export PATH=$PATH:$HOME/.config/composer/vendor/bin
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -83,7 +83,6 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  dotenv
   cp
   git
   git-commit
@@ -131,6 +130,7 @@ fi
 alias vim=nvim
 alias lg=lazygit
 alias c=clear
+alias artisan="php artisan"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
