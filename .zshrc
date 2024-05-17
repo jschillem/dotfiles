@@ -58,7 +58,7 @@ fi
 export PATH=/home/jschillem/.opam/default/bin:$PATH
 
 if command -v brew &> /dev/null; then
-  eval "$(opt/homebrew/bin/brew shellenv)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # --- keybindings ---
