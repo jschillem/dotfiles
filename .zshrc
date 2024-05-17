@@ -26,11 +26,11 @@ zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 zinit light clavelm/eza-omz-plugin
+zinit light jessarcher/zsh-artisan
 
 # --- snippets ---
 zinit snippet OMZP::git
 zinit snippet OMZP::archlinux
-zinit snippet OMZP::laravel
 zinit snippet OMZP::command-not-found
 
 # --- load completions ---
