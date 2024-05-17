@@ -1,0 +1,124 @@
+set surround
+set commentary
+set NERDTree
+
+set history=200
+set showcmd
+set showmode
+set scrolloff=5
+set hlsearch
+set cursorline
+
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+set autoindent
+set expandtab
+
+set gdefault
+set backspace=indent,eol,start
+set clipboard+=unnamedplus,unnamed,ideaput
+
+" Set leader key
+let mapleader=" "
+
+" Clear search highlights
+nnoremap <leader>nh :nohlsearch<CR>
+
+" Increment/decrement numbers
+nnoremap <leader>+ <C-a>
+nnoremap <leader>- <C-x>
+
+" Window management
+" -----------------
+
+" Split vertically
+nnoremap <leader>sv <C-w>v 
+
+" Split horizontally
+nnoremap <leader>sv <C-w>v
+
+" Equalize splits
+nnoremap <leader>se <C-w>=
+
+" Close window
+nnoremap <leader>sx :close<CR>
+
+" Tab management
+" --------------
+
+" New tab
+nnoremap <leader>to :tabnew<CR>
+
+" Close tab
+nnoremap <leader>tx :tabclose<CR>
+
+" Next tab
+nnoremap <leader>tn :tabnext<CR>
+
+" Previous tab
+nnoremap <leader>tp :tabprevious<CR>
+
+" Open file in new tab
+nnoremap <leader>tf :tabnew %<CR>
+
+" Rename element
+nnoremap <leader>rn :action RenameElement<CR>
+
+" Show intention actions
+nnoremap <leader>ca :action ShowIntentionActions<CR>
+
+" LSP actions
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gD :action GotoDeclaration<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap gr :action ShowUsages<CR>
+nnoremap K :action QuickJavaDoc<CR>
+nnoremap <leader>D :action ShowErrorDescription<CR>
+nnoremap [d :action GotoNextError<CR>
+nnoremap ]d :action GotoPreviousError<CR>
+
+" Fuzzy search
+nnoremap <leader>ff :action GotoFile<CR>
+nnoremap <leader>ft :action GotoSymbol<CR>
+
+" NERDTree toggle
+nnoremap <Leader>e :NERDTreeToggle<CR>
+
+
+
+
+" set history=500
+" set showcmd
+" set showmode
+" set scrolloff=5
+" set hlsearch
+" set incsearch
+" set ignorecase
+" set smartcase
+" set gdefault
+" set backspace=indent,eol,start
+"
+" nnoremap <Leader>nh :nohlsearch<CR>
+" nnoremap <Leader>ff :action GotoFile <CR>
+"
+"
+" nnoremap <Leader>sv :action SplitVertically<CR>
+" nnoremap <Leader>sh :action SplitHorizontally<CR>
+" nnoremap <Leader>sx :action Unsplit<CR>
+"
+" nnoremap <Leader>rn :action RenameElement<CR>
+" nnoremap <leader>ca :action ShowIntentionActions<CR>
+"
+" set showmode
+" set modeline
+" set number relativenumber
+" set clipboard+=unnamedplus
+" set clipboard+=ideaput
+
