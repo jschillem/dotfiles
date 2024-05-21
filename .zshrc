@@ -34,6 +34,7 @@ zinit snippet OMZP::archlinux
 zinit snippet OMZP::command-not-found
 
 # --- load completions ---
+fpath=(~/.zsh/completion $fpath)
 autoload -Uz compinit && compinit
 
 zinit cdreplay -q
@@ -49,6 +50,8 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/.config/composer/vendor/bin
 export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="/home/jschillem/.turso:$PATH"
+export PATH=$PATH:./node_modules/.bin
 
 
 if which ruby >/dev/null && which gem >/dev/null; then
@@ -120,4 +123,5 @@ OPAM_SWITCH_PREFIX='/home/jschillem/.opam/default'; export OPAM_SWITCH_PREFIX;
 CAML_LD_LIBRARY_PATH='/home/jschillem/.opam/default/lib/stublibs:/home/jschillem/.opam/default/lib/ocaml/stublibs:/home/jschillem/.opam/default/lib/ocaml'; export CAML_LD_LIBRARY_PATH;
 OCAML_TOPLEVEL_PATH='/home/jschillem/.opam/default/lib/toplevel'; export OCAML_TOPLEVEL_PATH;
 MANPATH=':/home/jschillem/.opam/default/man'; export MANPATH;
+
 
