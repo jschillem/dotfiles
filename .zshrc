@@ -74,6 +74,8 @@ alias vim=nvim
 alias c=clear
 alias lg=lazygit
 alias tree="eza --group-directories-first --tree -L 3"
+alias pbcopy="xsel -ib"
+alias pbpaste="xsel -ob"
 
 # --- history ---
 HISTSIZE=5000
