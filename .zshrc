@@ -99,6 +99,15 @@ zstyle ":fzf-tab:complete:__zoxide_z:*" fzf-preview 'ls --color --group-director
 
 export BAT_THEME="kanagawa"
 
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+  --color=fg:#C8C093,fg+:#DCD7BA,bg:#1F1F28,bg+:#2A2A37
+  --color=hl:#938AA9,hl+:#FF9E3B,info:#FF9E3B,marker:#76946A
+  --color=prompt:#54546D,spinner:#C8C093,pointer:#FF9E3B,header:#87afaf
+  --color=border:#363646,label:#DCD7BA,query:#DCD7BA
+  --border="sharp" --border-label="" --preview-window="border-sharp" --padding="1"
+  --prompt=" " --marker="" --pointer="󰄾"
+  --separator="─" --scrollbar="│"'
+
 # --- shell integrations ---
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
