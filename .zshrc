@@ -136,3 +136,11 @@ OCAML_TOPLEVEL_PATH='/home/jschillem/.opam/default/lib/toplevel'; export OCAML_T
 MANPATH=':/home/jschillem/.opam/default/man'; export MANPATH;
 
 
+
+# pnpm
+export PNPM_HOME="/home/jschillem/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
