@@ -49,10 +49,12 @@ export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/.config/composer/vendor/bin
-export PATH="$BUN_INSTALL/bin:$PATH"
-export PATH="/home/jschillem/.turso:$PATH"
+export PATH=$BUN_INSTALL/bin:$PATH
+export PATH=$HOME/.turso:$PATH
 export PATH=$PATH:./node_modules/.bin
+export PATH=$HOME/.bin:$PATH
 
+export XDG_DATA_DIRS='/var/lib/flatpak/exports/share':$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS
 
 if which ruby >/dev/null && which gem >/dev/null; then
     export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
@@ -71,11 +73,13 @@ bindkey '^n' history-search-forward
 
 # --- aliases --- 
 alias vim=nvim
+alias svim="sudo -E nvim"
 alias c=clear
 alias lg=lazygit
 alias tree="eza --group-directories-first --tree -L 3"
 alias pbcopy="xsel -ib"
 alias pbpaste="xsel -ob"
+alias ssh="kitten ssh"
 
 # --- history ---
 HISTSIZE=5000
@@ -92,21 +96,34 @@ setopt hist_find_no_dups
 
 # --- styling ---
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' menu no
-zstyle ":fzf-tab:complete:cd:*" fzf-preview 'ls --color --group-directories-first $realpath'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --group-directories-first --icons --color=always $realpath'
 zstyle ":fzf-tab:complete:__zoxide_z:*" fzf-preview 'ls --color --group-directories-first $realpath'
 
-export BAT_THEME="kanagawa"
+export BAT_THEME="OneDark"
+
 
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-  --color=fg:#C8C093,fg+:#DCD7BA,bg:#1F1F28,bg+:#2A2A37
-  --color=hl:#938AA9,hl+:#FF9E3B,info:#FF9E3B,marker:#76946A
-  --color=prompt:#54546D,spinner:#C8C093,pointer:#FF9E3B,header:#87afaf
-  --color=border:#363646,label:#DCD7BA,query:#DCD7BA
-  --border="sharp" --border-label="" --preview-window="border-sharp" --padding="1"
-  --prompt=" " --marker="" --pointer="󰄾"
-  --separator="─" --scrollbar="│"'
+  --color=fg:#abb2bf,fg+:#b8bfcc,bg:#282c34,bg+:#181a1f
+  --color=hl:#61afef,hl+:#56b6c2,info:#5c6370,marker:#c678dd
+  --color=prompt:#61afef,spinner:#c678dd,pointer:#c678dd,header:#d19a66
+  --color=border:#181a1f,label:#aeaeae,query:#d9d9d9
+  --border="sharp" --border-label="" --preview-window="border-sharp" --prompt="► "
+  --marker="»" --pointer="➔" --separator="─" --scrollbar="│"'
+
+zstyle ':fzf-tab:*' fzf-flags \
+  --color=fg:#abb2bf,bg:#282c34,hl:#61afef,fg+:#b8bfcc,bg+:#181a1f,hl+:#56b6c2 \
+  --color=info:#5c6370,prompt:#61afef,pointer:#c678dd,marker:#c678dd,spinner:#c678dd \
+  --color=header:#d19a66,border:#181a1f,label:#aeaeae,query:#d9d9d9 \
+  --border=sharp \
+  --preview-window=border-sharp \
+  --prompt='► ' \
+  --marker='»' \
+  --pointer='➔' \
+  --separator='─' \
+  --scrollbar='│' \
+  --border-label=''
 
 # --- shell integrations ---
 eval "$(fzf --zsh)"
