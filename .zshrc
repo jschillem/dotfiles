@@ -53,6 +53,7 @@ export PATH=$BUN_INSTALL/bin:$PATH
 export PATH=$HOME/.turso:$PATH
 export PATH=$PATH:./node_modules/.bin
 export PATH=$HOME/.bin:$PATH
+export PATH="$PATH:$HOME/.local/share/yabridge"
 
 export XDG_DATA_DIRS='/var/lib/flatpak/exports/share':$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS
 
