@@ -54,6 +54,7 @@ export PATH=$HOME/.turso:$PATH
 export PATH=$PATH:./node_modules/.bin
 export PATH=$HOME/.bin:$PATH
 export PATH="$PATH:$HOME/.local/share/yabridge"
+export PATH=$HOME/.cargo/bin:$PATH
 
 export XDG_DATA_DIRS='/var/lib/flatpak/exports/share':$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS
 
@@ -162,3 +163,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/amd_icd64.json
+export RESOLVE_SCRIPT_API="/opt/resolve/Developer/Scripting/"
+export RESOLVE_SCRIPT_LIB="/opt/resolve/libs/Fusion/fusionscript.so"
+export PYTHONPATH="$PYTHONPATH:$RESOLVE_SCRIPT_API/Modules/"
