@@ -164,7 +164,7 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/amd_icd64.json
+export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json
 export RESOLVE_SCRIPT_API="/opt/resolve/Developer/Scripting/"
 export RESOLVE_SCRIPT_LIB="/opt/resolve/libs/Fusion/fusionscript.so"
 export PYTHONPATH="$PYTHONPATH:$RESOLVE_SCRIPT_API/Modules/"
