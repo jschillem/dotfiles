@@ -40,15 +40,6 @@ zinit snippet OMZP::git
 zinit snippet OMZP::archlinux
 zinit snippet OMZP::command-not-found
 
-# --- load completions ---
-fpath=(~/.zsh/completions $fpath)
-autoload -Uz compinit && compinit
-
-zinit cdreplay -q
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
 # --- path setup ---
 
 export GOPATH=$HOME/go
@@ -62,6 +53,18 @@ export PATH=$PATH:./node_modules/.bin
 export PATH=$HOME/.bin:$PATH
 export PATH="$PATH:$HOME/.local/share/yabridge"
 export PATH=$HOME/.cargo/bin:$PATH
+
+
+# --- load completions ---
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit && compinit
+eval "$(dnspyre --completion-script-zsh)"
+[ -s "/home/jschillem/.bun/_bun" ] && source "/home/jschillem/.bun/_bun"
+
+zinit cdreplay -q
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 export XDG_DATA_DIRS='/var/lib/flatpak/exports/share':$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS
 
@@ -143,8 +146,6 @@ else
 fi
 
 # --- bun ---
-# bun completions
-[ -s "/home/jschillem/.bun/_bun" ] && source "/home/jschillem/.bun/_bun"
 export BUN_INSTALL="$HOME/.bun"
 
 # --- nvm ---

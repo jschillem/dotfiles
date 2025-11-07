@@ -1,0 +1,327 @@
+#!/usr/bin/env zsh
+
+# ta - Tmux Attach
+# Attach to an existing tmux session or create a new one
+
+set -euo pipefail
+
+# Color codes for output
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly CYAN='\033[0;36m'
+readonly NC='\033[0m' # No Color
+
+# Script metadata
+readonly SCRIPT_NAME="${0:t}"
+readonly VERSION="1.0.0"
+
+# Function to print colored messages
+print_error() {
+    print -P "%F{red}✗%f $1" >&2
+}
+
+print_success() {
+    print -P "%F{green}✓%f $1"
+}
+
+print_warning() {
+    print -P "%F{yellow}⚠%f $1"
+}
+
+print_info() {
+    print -P "%F{blue}ℹ%f $1"
+}
+
+# Function to display usage
+usage() {
+    cat <<EOF
+Usage: ${SCRIPT_NAME} [OPTIONS] SESSION_NAME
+
+Attach to an existing tmux session or create a new one if it doesn't exist.
+
+OPTIONS:
+    -h, --help      Show this help message
+    -v, --version   Show version information
+    -l, --list      List all active sessions and exit
+    -d, --detach    Detach other clients when attaching
+    -r, --readonly  Attach in read-only mode
+    -f, --force     Create session without prompting if it doesn't exist
+
+ARGUMENTS:
+    SESSION_NAME    Name of the tmux session to attach to (required unless -l)
+
+EXAMPLES:
+    ${SCRIPT_NAME} work         # Attach to session 'work'
+    ${SCRIPT_NAME} -l           # List all active sessions
+    ${SCRIPT_NAME} -d project   # Attach and detach other clients
+    ${SCRIPT_NAME} -f dev       # Create 'dev' if it doesn't exist (no prompt)
+
+EOF
+}
+
+# Function to check if tmux is installed
+check_tmux() {
+    if ! command -v tmux &>/dev/null; then
+        print_error "tmux is not installed or not in PATH"
+        exit 1
+    fi
+}
+
+# Function to get formatted session list
+get_session_list() {
+    local sessions
+    sessions=$(tmux list-sessions 2>/dev/null || true)
+    
+    if [[ -z "${sessions}" ]]; then
+        return 1
+    fi
+    
+    # Format the output nicely
+    print -P "\n%F{cyan}Active tmux sessions:%f"
+    print -P "%F{yellow}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%f"
+    
+    while IFS= read -r line; do
+        # Parse session information
+        local session_name="${line%%:*}"
+        local session_info="${line#*: }"
+        
+        # Extract additional info
+        local windows=$(echo "${session_info}" | grep -oE '[0-9]+ windows?' || echo "")
+        local attached=""
+        if [[ "${session_info}" == *"(attached)"* ]]; then
+            attached=" %F{green}[attached]%f"
+        fi
+        
+        # Format and print
+        print -P "  %F{white}•%f %F{cyan}${session_name}%f - ${windows}${attached}"
+        
+        # Show creation time if available
+        local created=$(tmux display-message -p -t "${session_name}" '#{session_created}' 2>/dev/null || true)
+        if [[ -n "${created}" ]]; then
+            # Convert epoch to readable format
+            local formatted_date=$(date -d "@${created}" '+%Y-%m-%d %H:%M' 2>/dev/null || \
+                                  date -r "${created}" '+%Y-%m-%d %H:%M' 2>/dev/null || \
+                                  echo "")
+            if [[ -n "${formatted_date}" ]]; then
+                print -P "    %F{240}Created: ${formatted_date}%f"
+            fi
+        fi
+    done <<< "${sessions}"
+    
+    print -P "%F{yellow}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%f\n"
+    return 0
+}
+
+# Function to check if session exists
+session_exists() {
+    local session_name="$1"
+    tmux has-session -t "${session_name}" 2>/dev/null
+}
+
+# Function to prompt for session creation
+prompt_create_session() {
+    local session_name="$1"
+    
+    print_warning "Session '${session_name}' does not exist."
+    
+    # Show existing sessions if any
+    if ! get_session_list; then
+        print_info "No active tmux sessions found."
+    fi
+    
+    # Prompt user
+    print -n "Would you like to create a new session named '${session_name}'? [Y/n]: "
+    read -r response
+    
+    # Default to yes if just Enter is pressed
+    if [[ -z "${response}" ]] || [[ "${response}" =~ ^[Yy]$ ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Function to create session
+create_session() {
+    local session_name="$1"
+    
+    print_info "Creating new session: ${session_name}"
+    
+    if tmux new-session -d -s "${session_name}" 2>/dev/null; then
+        print_success "Session '${session_name}' created successfully"
+        return 0
+    else
+        print_error "Failed to create session '${session_name}'"
+        return 1
+    fi
+}
+
+# Function to attach to session
+attach_to_session() {
+    local session_name="$1"
+    local detach_others="$2"
+    local readonly_mode="$3"
+    
+    local tmux_args=()
+    tmux_args+=("attach-session")
+    tmux_args+=("-t" "${session_name}")
+    
+    if [[ "${detach_others}" == "true" ]]; then
+        tmux_args+=("-d")
+    fi
+    
+    if [[ "${readonly_mode}" == "true" ]]; then
+        tmux_args+=("-r")
+    fi
+    
+    # Check if we're already in a tmux session
+    if [[ -n "${TMUX:-}" ]]; then
+        print_warning "Already inside a tmux session."
+        print_info "Consider using 'tmux switch-client -t ${session_name}' instead."
+        print -n "Continue with nested session? [y/N]: "
+        read -r response
+        if [[ ! "${response}" =~ ^[Yy]$ ]]; then
+            print_info "Operation cancelled"
+            exit 0
+        fi
+    fi
+    
+    print_info "Attaching to session: ${session_name}"
+    
+    # The attach command will take over the terminal if successful
+    if ! tmux "${tmux_args[@]}"; then
+        print_error "Failed to attach to session '${session_name}'"
+        return 1
+    fi
+    
+    # This line is only reached if attach fails or after detaching
+    return 0
+}
+
+# Function to validate session name
+validate_session_name() {
+    local session_name="$1"
+    
+    if [[ ! "${session_name}" =~ ^[a-zA-Z0-9_.-]+$ ]]; then
+        print_error "Invalid session name: ${session_name}"
+        print_info "Session names can only contain alphanumeric characters, dots, underscores, and hyphens"
+        return 1
+    fi
+    return 0
+}
+
+# Main function
+main() {
+    local session_name=""
+    local list_only="false"
+    local detach_others="false"
+    local readonly_mode="false"
+    local force_create="false"
+    
+    # Parse command line arguments
+    local -a positional_args=()
+    
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            -v|--version)
+                print "Version ${VERSION}"
+                exit 0
+                ;;
+            -l|--list)
+                list_only="true"
+                shift
+                ;;
+            -d|--detach)
+                detach_others="true"
+                shift
+                ;;
+            -r|--readonly)
+                readonly_mode="true"
+                shift
+                ;;
+            -f|--force)
+                force_create="true"
+                shift
+                ;;
+            -*)
+                print_error "Unknown option: $1"
+                usage
+                exit 1
+                ;;
+            *)
+                positional_args+=("$1")
+                shift
+                ;;
+        esac
+    done
+    
+    # Check if tmux is available
+    check_tmux
+    
+    # Handle list-only mode
+    if [[ "${list_only}" == "true" ]]; then
+        if ! get_session_list; then
+            print_info "No active tmux sessions found."
+            print_info "Create a new session with: nts [session_name]"
+        fi
+        exit 0
+    fi
+    
+    # Check for required session name
+    if [[ ${#positional_args[@]} -eq 0 ]]; then
+        print_error "Session name is required"
+        usage
+        exit 1
+    elif [[ ${#positional_args[@]} -gt 1 ]]; then
+        print_error "Too many arguments provided"
+        usage
+        exit 1
+    fi
+    
+    session_name="${positional_args[1]}"
+    
+    # Validate session name
+    if ! validate_session_name "${session_name}"; then
+        exit 1
+    fi
+    
+    # Check if session exists
+    if session_exists "${session_name}"; then
+        # Session exists, attach to it
+        if ! attach_to_session "${session_name}" "${detach_others}" "${readonly_mode}"; then
+            exit 1
+        fi
+    else
+        # Session doesn't exist
+        local should_create="false"
+        
+        if [[ "${force_create}" == "true" ]]; then
+            should_create="true"
+        elif prompt_create_session "${session_name}"; then
+            should_create="true"
+        fi
+        
+        if [[ "${should_create}" == "true" ]]; then
+            if create_session "${session_name}"; then
+                # Attach to the newly created session
+                if ! attach_to_session "${session_name}" "${detach_others}" "${readonly_mode}"; then
+                    exit 1
+                fi
+            else
+                exit 1
+            fi
+        else
+            print_info "Operation cancelled"
+            exit 0
+        fi
+    fi
+}
+
+# Run main function
+main "$@"

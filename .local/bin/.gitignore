@@ -1,3 +1,5 @@
 *
 !.gitignore
 !my-tmux
+!nts
+!ta
