@@ -113,18 +113,34 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --group-directories-first --icons --color=always $realpath'
 zstyle ":fzf-tab:complete:__zoxide_z:*" fzf-preview 'ls --color --group-directories-first $realpath'
 
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-  --color=fg:#abb2bf,fg+:#b8bfcc,bg:#282c34,bg+:#181a1f
-  --color=hl:#61afef,hl+:#56b6c2,info:#5c6370,marker:#c678dd
-  --color=prompt:#61afef,spinner:#c678dd,pointer:#c678dd,header:#d19a66
-  --color=border:#181a1f,label:#aeaeae,query:#d9d9d9
-  --border="sharp" --border-label="" --preview-window="border-sharp" --prompt="► "
-  --marker="»" --pointer="➔" --separator="─" --scrollbar="│"'
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
+  --highlight-line \
+  --info=inline-right \
+  --ansi \
+  --layout=reverse \
+  --border=none \
+  --color=bg+:#2e3c64 \
+  --color=bg:#1f2335 \
+  --color=border:#29a4bd \
+  --color=fg:#c0caf5 \
+  --color=gutter:#1f2335 \
+  --color=header:#ff9e64 \
+  --color=hl+:#2ac3de \
+  --color=hl:#2ac3de \
+  --color=info:#545c7e \
+  --color=marker:#ff007c \
+  --color=pointer:#ff007c \
+  --color=prompt:#2ac3de \
+  --color=query:#c0caf5:regular \
+  --color=scrollbar:#29a4bd \
+  --color=separator:#ff9e64 \
+  --color=spinner:#ff007c \
+"
 
 zstyle ':fzf-tab:*' fzf-flags \
-  --color=fg:#abb2bf,bg:#282c34,hl:#61afef,fg+:#b8bfcc,bg+:#181a1f,hl+:#56b6c2 \
-  --color=info:#5c6370,prompt:#61afef,pointer:#c678dd,marker:#c678dd,spinner:#c678dd \
-  --color=header:#d19a66,border:#181a1f,label:#aeaeae,query:#d9d9d9 \
+  --color=fg:#c0caf5,bg:#1f2335,hl:#2ac3de,fg+:#c0caf5,bg+:#2e3c64,hl+:#2ac3de \
+  --color=info:#545c7e,prompt:#2ac3de,pointer:#ff007c,marker:#ff007c,spinner:#ff007c \
+  --color=header:#ff9e64,border:#29a4bd,label:#c0caf5,query:#c0caf5 \
   --border=sharp \
   --preview-window=border-sharp \
   --prompt='► ' \
